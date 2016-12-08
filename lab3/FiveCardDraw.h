@@ -18,6 +18,8 @@ class FiveCardDraw : public Game {
 protected:
 	size_t dealer; //start at 0
 	Deck discardDeck; //under the assumption that the deck constructor initializes empty deck
+	int commonChipPot; //NEW: we were not specifically asked to make it protected/member variable but i think this is the best thing to do 
+
 public:
 	FiveCardDraw();
 	virtual int before_turn(Player& p);
