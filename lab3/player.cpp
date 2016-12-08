@@ -14,6 +14,7 @@ Player::Player(std::string n) {
 	name = n;
 	handsWon = 0;
 	handsLost = 0;
+	chips = 20; //NEW
 	hand = Hand();
 	string fileName = n + ".txt";
 
@@ -21,6 +22,7 @@ Player::Player(std::string n) {
 	ifstream ifs(fileName);
 	bool wExtracted = false;
 	bool lExtracted = false;
+	bool chipsExtracted = false;
 
 
 	if (ifs.is_open()) {
@@ -41,6 +43,10 @@ Player::Player(std::string n) {
 				handsLost = stoi(number);
 				lExtracted = true;
 			}
+			else if (p == 'C') { //NEW
+				chips = stoi(number);
+				chipsExtracted = true;
+			}
 		}
 		if (!wExtracted || !lExtracted) {
 			handsWon = 0;
@@ -50,6 +56,6 @@ Player::Player(std::string n) {
 }
 
 ostream& operator<< (ostream& out, const Player& p) {
-	out << "Player: " << p.name << " Wins: " << p.handsWon << " Losses: " << p.handsLost;
+	out << "Player: " << p.name << " Wins: " << p.handsWon << " Losses: " << p.handsLost << "Chips: "<<p.chips; //new
 	return out;
 }
