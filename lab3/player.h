@@ -17,6 +17,8 @@ struct Player {
 	Hand hand;
 	unsigned int handsWon;
 	unsigned int handsLost;
+	unsigned int chips; //NEW
+
 	Player(std::string n);
 };
 
