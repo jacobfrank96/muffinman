@@ -27,19 +27,17 @@ Deck::Deck(char * filename)
 	}
 }
 
-//virtual ~Deck(); //DO I NEED TO PUT COMMENT HERE??
-
 int Deck::load(char * filename) {
 	ifstream in(filename);
 	if (in.is_open()) {
 		string localLine;
 		while (getline(in, localLine)) {
 			istringstream iss(localLine);
-			bool empty = true; //kees track of empty lines, allowowing program to skip lines without printing out "too many" or "too few"
+			bool empty = true; //keeps track of empty lines, allowowing program to skip lines without printing out "too many" or "too few"
 			string cardString;
 			while (iss >> cardString) {
 				if (cardString.length() == 2 || cardString.length() == 3) { //make sure string is right length
-					empty = false; //
+					empty = false; 
 					Card card = parseString(cardString);
 					if (card.suit != invalidSuit && card.rank != invalidRank) { //make sure ranks are between 2-Ace and suits one of the four
 						deck_vector.push_back(card); //push back string to temporary vector hand
@@ -55,7 +53,7 @@ int Deck::load(char * filename) {
 }
 
 int Deck::shuffle() {
-	unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+	unsigned seed = (int)std::chrono::system_clock::now().time_since_epoch().count();
 	std::shuffle(deck_vector.begin(), deck_vector.end(), std::default_random_engine(seed));
 	return success;
 }
