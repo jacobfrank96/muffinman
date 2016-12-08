@@ -48,6 +48,8 @@ enum outcome {
 	access_out_of_bounds = 15,
 	erase_out_of_bounds = 16,
 	too_few_arguments = 17
+	not_enough_chips = 18 //New
+
 };
 
 Card parseString(string card_string);
