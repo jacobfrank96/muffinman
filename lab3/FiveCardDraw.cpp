@@ -17,7 +17,8 @@
 using namespace std;
 
 FiveCardDraw::FiveCardDraw()
-	: dealer(0)
+	: dealer(0), commonChipPot(0) //commonChipPot is NEW
+
 {
 	for (int i = 2; i <= 14; i++) {
 		for (int j = 0; j < 4; j++) {
@@ -26,6 +27,20 @@ FiveCardDraw::FiveCardDraw()
 			Card c = Card(c_suit, c_rank);
 			(this->main_deck).add_card(c);
 		}
+	}
+}
+
+//void whichAction(bool betOnTable ) {
+//	cout << "Which action would you like to perform? (" << endl;
+//	string input;
+//	cin >> input;
+//}
+
+//NEW: BETTING PHASE
+void betting_phase(Player &p) {
+	bool bet_on_table = false;
+	if (!bet_on_table) { // players may either check or bet 1-2 cards
+
 	}
 }
 
@@ -56,7 +71,7 @@ int FiveCardDraw::before_turn(Player & p) {
 			// if the converted value would fall out of the range of the result type 
 			// or if the underlying function (std::strtol or std::strtoull) sets errno 
 			// to ERANGE.
-			cout << "Number is out of range of int capacity. Error: "<< e.what() << endl;
+			cout << "Number is out of range of int capacity. Error: " << e.what() << endl;
 		}
 	}
 	while (cardsToDiscard > 0) {
@@ -123,6 +138,12 @@ int FiveCardDraw::after_turn(Player& p) {
 }
 
 int FiveCardDraw::before_round() {
+
+	for (int i = 0; i < players.size; ++i) { //New: remove chip from each player before round and add to common chip pot
+		--players.at(i)->chips;
+		++commonChipPot;
+	}
+
 	(this->main_deck).shuffle(); //shuffle main deck
 	int start = (this->dealer) + 1;
 	int num_players = (this->players).size();
@@ -198,7 +219,7 @@ int FiveCardDraw::after_round() {
 		cout << "current hand" << endl;
 		cout << temp_players.at(i)->hand << endl;
 	}
-
+	
 	for (size_t i = 0; i < temp_players.size(); ++i) {
 		for (int j = (temp_players.at(i))->hand.size() - 1; j >= 0; --j) {
 			Card toMove = (temp_players.at(i)->hand)[j];
@@ -209,6 +230,23 @@ int FiveCardDraw::after_round() {
 
 	main_deck.getCardsFromDeck(discardDeck);
 	bool leaveGame = false;
+
+	//NEW. AFTER ROUND CHECK PLAYERS CHIPS AND ASK IF THEY WANT TO RESET OR LEAVE
+	for (size_t i = 0; i < temp_players.size(); i++) {
+		if (temp_players.at(i)->chips <= 0) {
+			cout << "You don't have any chips left. In order to keep playing you must reset your chips to 20. Would you like to do that? Please enter 'yes' or 'no'." << endl;
+			string responseChips;
+			cin >> responseChips;
+			if (responseChips == "yes" || responseChips == "Yes") {
+				//reset chips
+				temp_players.at(i)->chips = 20;
+			}
+			else if (responseChips == "no" || responseChips == "No") {
+				leaveGame = true;
+			}
+		}
+
+	}
 	while (!leaveGame) {
 		cout << "Do any players want to leave the game? Please enter 'yes' or 'no'." << endl;
 		string responseLeave;
@@ -227,6 +265,7 @@ int FiveCardDraw::after_round() {
 				{
 					playerFile << "W" << player->handsWon << "\n";
 					playerFile << "L" << player->handsLost << "\n";
+					playerFile << "C" << player->chips << "\n"; //new
 					playerFile.close();
 				}
 				remove_player(responseName); //remove player
@@ -241,6 +280,7 @@ int FiveCardDraw::after_round() {
 		if (players.size() == 0) {
 			break;
 		}
+		
 	}
 	bool joinGame = true;
 	while (joinGame) {
