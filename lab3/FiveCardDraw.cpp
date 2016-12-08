@@ -19,7 +19,7 @@ using namespace std;
 FiveCardDraw::FiveCardDraw()
 	: dealer(0)
 {
-	for (int i = 2; i <= 14; i++) { //variable not accessible HELP CUCKIER
+	for (int i = 2; i <= 14; i++) {
 		for (int j = 0; j < 4; j++) {
 			card_rank c_rank = getRank(i);
 			card_suit c_suit = getSuit(j);
@@ -30,7 +30,6 @@ FiveCardDraw::FiveCardDraw()
 }
 
 int FiveCardDraw::before_turn(Player & p) {
-	//add implementation
 	int cardsToDiscard = 0;
 	cout << endl;
 	cout << p << endl;
@@ -51,13 +50,13 @@ int FiveCardDraw::before_turn(Player & p) {
 		}
 		catch (std::invalid_argument& e) {
 			// if no conversion could be performed
-			cout << "Please enter a numerical answer (0, 1, 2, 3, 4, 5)" << endl;
+			cout << "Please enter a numerical answer (0, 1, 2, 3, 4, 5) Error: " << e.what() << endl;
 		}
 		catch (std::out_of_range& e) {
 			// if the converted value would fall out of the range of the result type 
 			// or if the underlying function (std::strtol or std::strtoull) sets errno 
 			// to ERANGE.
-			cout << "Number is out of range of int capacity" << endl;
+			cout << "Number is out of range of int capacity. Error: "<< e.what() << endl;
 		}
 	}
 	while (cardsToDiscard > 0) {
@@ -73,13 +72,13 @@ int FiveCardDraw::before_turn(Player & p) {
 		}
 		catch (std::invalid_argument& e) {
 			// if no conversion could be performed
-			cout << "Please enter a numerical answer (0, 1, 2, ...)" << endl;
+			cout << "Please enter a numerical answer (0, 1, 2, ...). Error: " << e.what() << endl;
 		}
 		catch (std::out_of_range& e) {
 			// if the converted value would fall out of the range of the result type 
 			// or if the underlying function (std::strtol or std::strtoull) sets errno 
 			// to ERANGE.
-			cout << "Number is out of range of int capacity" << endl;
+			cout << "Number is out of range of int capacity. Error: " << e.what() << endl;
 		}
 		catch (int e) {
 			switch (e) {
@@ -230,7 +229,7 @@ int FiveCardDraw::after_round() {
 					playerFile << "L" << player->handsLost << "\n";
 					playerFile.close();
 				}
-				remove_player(responseName); //remove player. Ensure remove player is defined correctly
+				remove_player(responseName); //remove player
 			}
 			else {
 				cout << "That player is not currently at the table" << endl;
